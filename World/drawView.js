@@ -8,4 +8,7 @@ function draw() {
     drawPlayer();
     drawPlayerStats();
     drawEnemies();
+    updateEnemies();
+    setupPlayerAttack();
+    initEnemies();
 }

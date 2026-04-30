@@ -12,12 +12,12 @@ for (let i = 0; i < rngX(); i++) {
 
 
 function rngX() {
-    return Math.floor(Math.random() * 950)
+    return Math.floor(Math.random() * 2500)
 }
 
 
 function rngY() {
-    return Math.floor(Math.random() * 800)
+    return Math.floor(Math.random() * 990)
 }
 
 

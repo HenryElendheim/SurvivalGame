@@ -12,6 +12,53 @@ const model = {
         },
         enemies: [],
 
+        enemyTypes: {
+            basic: {
+                name: "Basic Enemy",
+                size: 30,
+                health: 50,
+                damage: 15,
+                speed: 1.5,
+                color: "#b61818",
+                attractionRange: 200,
+                attackRange: 10,
+                attackCooldown: 1000
+            },
+            fast: {
+                name: "Fast Enemy",
+                size: 25,
+                health: 35,
+                damage: 10,
+                speed: 2.5,
+                color: "#ff6b6b",
+                attractionRange: 250,
+                attackRange: 12,
+                attackCooldown: 800
+            },
+            tank: {
+                name: "Tank Enemy",
+                size: 40,
+                health: 100,
+                damage: 20,
+                speed: 1,
+                color: "#8b0000",
+                attractionRange: 150,
+                attackRange: 15,
+                attackCooldown: 1500
+            }
+        },
+
+        enemySpawn: {
+            spawnInterval: null,
+            isSpawning: false,
+            limits: {
+                tank: { max: 2, current: 0 },
+                fast: { max: 5, current: 0 },
+                basic: { max: 10, current: 0 }
+            },
+            spawnDelay: 60000, // 1min
+        },
+
         trees: [],
         stones: [],
 
@@ -56,6 +103,12 @@ const model = {
                 s: false,
                 d: false,
             },
+            combat: {
+                attackRange: 50,
+                attackCooldown: 0,
+                isAttacking: false,
+                attackDamage: 15,
+            }
         },
         crafting: {
             pickaxe: {
