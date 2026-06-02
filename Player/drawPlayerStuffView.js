@@ -30,11 +30,6 @@ function drawPlayer() {
         // Resets line width
         ctx.lineWidth = 1;
     }
-
-    ctx.strokeStyle = 'rgb(0, 0, 0)';
-    ctx.beginPath();
-    ctx.arc(model.data.player.position.x, model.data.player.position.y, model.data.player.combat.attackRange, 0, Math.PI * 2);
-    ctx.stroke();
 }
 
 function drawPlayerStats() {

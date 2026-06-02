@@ -49,21 +49,31 @@ function drawEnemies() {
 function updateEnemies() {
     const player = model.data.player;
     const enemies = model.data.enemies;
+    const sos = model.data.sos;
 
     for (let enemy of enemies) {
-        const dx = player.position.x - enemy.x;
-        const dy = player.position.y - enemy.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
+        // Distance to the player (used for attacking in both modes)
+        const pdx = player.position.x - enemy.x;
+        const pdy = player.position.y - enemy.y;
+        const playerDist = Math.sqrt(pdx * pdx + pdy * pdy);
 
-        // attraction range
-        const attractionRange = enemy.attractionRange || 200;
-
-        if (distance < attractionRange) {
-            if (distance <= (enemy.attackRange || 10)) {
+        if (sos.active) {
+            // The beacon has drawn them in — now they hunt the player from
+            // anywhere on the map and attack on contact.
+            if (playerDist <= (enemy.attackRange || 10)) {
                 attackPlayer(enemy);
+            } else if (playerDist > 1) {
+                moveTowardsPlayer(enemy, pdx, pdy, playerDist);
             }
-            else if (distance > 1) {
-                moveTowardsPlayer(enemy, dx, dy, distance);
+        } else {
+            // Normal behaviour: only react within attraction range of the player.
+            const attractionRange = enemy.attractionRange || 200;
+            if (playerDist < attractionRange) {
+                if (playerDist <= (enemy.attackRange || 10)) {
+                    attackPlayer(enemy);
+                } else if (playerDist > 1) {
+                    moveTowardsPlayer(enemy, pdx, pdy, playerDist);
+                }
             }
         }
     }
@@ -118,11 +128,11 @@ function attackPlayer(enemy) {
 
 
 function screenShake(intensity) {
-    const canvas = document.getElementById('gameCanvas');
+    if (!canvas) return;
     let shaketime = 0;
     const shakeInterval = setInterval(() => {
         if (shaketime >= intensity) {
-            canvas.style.transform = 'translate(0px, 0px)';
+            canvas.style.transform = 'none';
             clearInterval(shakeInterval);
         } else {
             const x = Math.random() * intensity - intensity/2;
@@ -149,7 +159,8 @@ function spawnEnemyType(x, y, type) {
         attackCooldownTime: type.attackCooldown,
         attackCooldown: null,
         isAttacking: false,
-        type: type.name
+        type: type.key,
+        typeName: type.name
     });
 }
 

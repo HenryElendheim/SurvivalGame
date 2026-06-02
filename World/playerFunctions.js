@@ -1,14 +1,32 @@
 function handlePlayerDeath() {
-    // resets the player upon death
-    model.data.player.survival.health = 100;
-    model.data.player.position.x = 400;
-    model.data.player.position.y = 300;
+    if (model.data.gameWon || model.data.gameOver) return;
+
+    // During the SOS survival phase, dying ends the run.
+    if (model.data.sos.active) {
+        model.data.gameOver = true;
+        model.data.sos.active = false;
+        if (typeof stopEnemySpawning === 'function') stopEnemySpawning();
+        model.data.enemies = [];
+        if (typeof updateView === 'function') updateView();
+        return;
+    }
+
+    // Otherwise: fair respawn while gathering / building.
+    model.data.deaths++;
+    const s = model.data.player.survival;
+    s.health = 100;
+    s.hunger = 50;
+    s.thirst = 80;
+    s.stamina = 100;
+    model.data.player.position.x = canvas.width / 2;
+    model.data.player.position.y = canvas.height / 2;
+    model.data.enemies = [];
 }
 
 function setupPlayerAttack() {
     window.addEventListener('click', (e) => {
-        // Get mouse position relative to canvas
-        const canvas = document.getElementById('gameCanvas');
+        if (model.data.gameWon || model.data.gameOver) return;
+        // Use the actual game canvas element
         const rect = canvas.getBoundingClientRect();
         const mouseX = e.clientX - rect.left;
         const mouseY = e.clientY - rect.top;
@@ -23,7 +41,8 @@ function setupPlayerAttack() {
     });
 
     window.addEventListener('keydown', (e) => {
-        if (e.code === 'Space' || e.code === 'KeyE') {
+        if (model.data.gameWon || model.data.gameOver) return;
+        if (e.code === 'Space') {
             e.preventDefault();
             // Attack in the direction player is facing
             let direction = { x: 1, y: 0 }; // Default right
@@ -84,10 +103,10 @@ function playerAttack(angle) {
                 let damage = player.combat.attackDamage;
 
                 // Different damage multipliers for different enemy types
-                if (enemy.type === 'TANK') {
+                if (enemy.type === 'tank') {
                     damage = Math.floor(damage * 0.7); // Tank takes 30% less damage
                     console.log(`Tank enemy reduced damage to ${damage}`);
-                } else if (enemy.type === 'FAST') {
+                } else if (enemy.type === 'fast') {
                     damage = Math.floor(damage * 1.2); // Fast takes 20% more damage
                     console.log(`Fast enemy took bonus damage: ${damage}`);
                 }
@@ -97,9 +116,9 @@ function playerAttack(angle) {
 
                 // Knockback effect (reduced for tank enemies)
                 let knockbackForce = 20;
-                if (enemy.type === 'TANK') {
+                if (enemy.type === 'tank') {
                     knockbackForce = 10; // Tanks are harder to push
-                } else if (enemy.type === 'FAST') {
+                } else if (enemy.type === 'fast') {
                     knockbackForce = 30; // Fast enemies get pushed more
                 }
 

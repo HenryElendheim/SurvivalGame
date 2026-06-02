@@ -1,7 +1,7 @@
 function statDecrease() {
     //health
     setInterval(() => {
-        if (model.data.player.survival.hunger && model.data.player.survival.thirst >= 80 && model.data.player.survival.health < 100) {
+        if (model.data.player.survival.hunger >= 80 && model.data.player.survival.thirst >= 80 && model.data.player.survival.health < 100) {
             model.data.player.survival.health += 1;
         } else if (model.data.player.survival.health <= 0) {
             model.data.player.survival.health = 0;

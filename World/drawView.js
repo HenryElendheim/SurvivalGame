@@ -5,10 +5,16 @@ function draw() {
 
     drawTrees();
     drawStones();
+    drawPlaceables();   // SOS tower + bubble
     drawPlayer();
     drawPlayerStats();
     drawEnemies();
-    updateEnemies();
-    setupPlayerAttack();
-    initEnemies();
+    if (!model.data.gameWon && !model.data.gameOver) {
+        updateEnemies();
+        updateSos();
+    }
+    drawSosHud();
+    drawCombatUI();
+    drawWinOverlay();
+    drawGameOverOverlay();
 }

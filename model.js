@@ -7,13 +7,14 @@ const model = {
     },
     data: {
         missions: {
-            currentMission: "Get Food and Water",
-            allMissions: ["Get Food and Water", "Build Campfire", "Place Campfire", "Build Shelter", "Build Bed", "Sleep through the night"],
+            currentMission: "Gather wood and stone",
+            allMissions: ["Gather wood and stone", "Build the SOS Tower", "Place the SOS Tower", "Survive the swarm!"],
         },
         enemies: [],
 
         enemyTypes: {
             basic: {
+                key: "basic",
                 name: "Basic Enemy",
                 size: 30,
                 health: 50,
@@ -25,6 +26,7 @@ const model = {
                 attackCooldown: 1000
             },
             fast: {
+                key: "fast",
                 name: "Fast Enemy",
                 size: 25,
                 health: 35,
@@ -36,6 +38,7 @@ const model = {
                 attackCooldown: 800
             },
             tank: {
+                key: "tank",
                 name: "Tank Enemy",
                 size: 40,
                 health: 100,
@@ -56,11 +59,26 @@ const model = {
                 fast: { max: 5, current: 0 },
                 basic: { max: 10, current: 0 }
             },
-            spawnDelay: 60000, // 1min
+            spawnDelay: 12000, // 12s
         },
 
         trees: [],
         stones: [],
+        placeables: [],
+
+        sos: {
+            placed: false,
+            active: false,
+            x: 0,
+            y: 0,
+            radius: 190,
+            elapsedMs: 0,
+            requiredMs: 30000, // survive 30 seconds inside the bubble
+            lastTick: null,
+        },
+        gameWon: false,
+        gameOver: false,
+        deaths: 0,
 
         player: {
             survival: {

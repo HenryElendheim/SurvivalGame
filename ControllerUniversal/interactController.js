@@ -8,17 +8,17 @@ function chopTree() {
         );
 
         if (distance < tree.hitbox && model.data.player.survival.stamina >= exhaustion) {
-            // Give resources
-            model.data.player.inventory[0].amount += tree.coconuts;
-            model.data.player.inventory[1].amount += tree.wood;
+            // Give resources (inventory[0] = Wood, inventory[1] = Coconut)
+            model.data.player.inventory[0].amount += tree.wood;
+            model.data.player.inventory[1].amount += tree.coconuts;
             model.data.player.survival.stamina -= exhaustion;
-            // Add wood to inventory too if you have wood counter
             model.data.trees.splice(i, 1);  // Tree is gone
             updateView();
             break;
         }
     }
     checkMax()
+    checkGatherMission()
 }
 
 
@@ -46,6 +46,7 @@ function breakStone() {
         }
     }
     checkMax()
+    checkGatherMission()
 }
 
 
@@ -57,6 +58,7 @@ function eatCoconut() {
         player.thirst += coconut.water;
         player.stamina += coconut.energy;
         coconut.amount--;
+        updateView();
     }
     checkMax()
 }
