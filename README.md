@@ -55,7 +55,7 @@ Then open `index.html` in your browser — that's it. (Or use a live-server exte
 
 The code follows a model–view–controller split: `model.js` holds the single source of truth, the view files draw from it, and the controllers are the only ones that change it.
 
-## 💭 Reflections
+## Reflections
 
 > This was a huge project for me. I was really testing my limits here and hit the wall for quite a while.
 > Doing 2D visuals was way harder than I thought.
